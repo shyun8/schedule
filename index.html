@@ -257,7 +257,7 @@
             <!-- Week Event Number and Week Change Info -->
             <div class="week-info">
                 <p>이번 주 이벤트는 <span id="event-count">5개</span>입니다.</p>
-                <p>지난주보다 <span id="event-difference">2개 더 많아요!</span></p>
+                <p>지난주 대비 변화는 <span id="event-difference">2개 더 많아요!</span>예요</p>
             </div>
 
             <div class="category-summary">
@@ -386,7 +386,7 @@
 
             const prevWeekEventCount = eventsData[currentWeekIndex - 1] ? eventsData[currentWeekIndex - 1].events.length : 0;
             const eventDifference = events.length - prevWeekEventCount;
-            document.getElementById('event-difference').textContent = `${eventDifference >= 0 ? '+' : ''}${eventDifference}개 더 많아요!`;
+            document.getElementById('event-difference').textContent = `${eventDifference >= 0 ? '+' : ''}${eventDifference}개`;
         }
 
         // Week navigation
