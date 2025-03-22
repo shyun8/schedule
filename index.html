@@ -11,32 +11,68 @@
             font-family: 'Pretendard', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #f4f7fb;
+            color: #333;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 900px;
+            margin: 40px auto;
             padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         .week-indicator {
             font-size: 24px;
+            font-weight: 600;
+            color: #2a2a2a;
             text-align: center;
             margin-bottom: 20px;
+        }
+        .arrow-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .arrow-buttons button {
+            background-color: transparent;
+            color: #007BFF;
+            border: 1px solid #007BFF;
+            border-radius: 50%;
+            padding: 10px;
+            font-size: 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .arrow-buttons button:hover {
+            background-color: #007BFF;
+            color: #fff;
+            transform: translateY(-2px);
         }
         .week-change {
-            font-weight: bold;
+            font-weight: 600;
             color: #333;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+        .week-change span {
+            font-weight: bold;
         }
         .event-summary {
-            background-color: #fff;
-            padding: 15px;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
             border: 1px solid #ddd;
         }
         .event-summary p {
-            margin: 5px 0;
+            margin: 0;
+            font-size: 14px;
+            color: #666;
         }
         .event-list {
             margin-top: 30px;
@@ -44,46 +80,38 @@
         .event-item {
             background-color: #fff;
             padding: 20px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .event-item:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
         }
         .event-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #000;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
         }
         .event-time {
-            font-size: 16px;
+            font-size: 14px;
             color: #777;
+            margin-bottom: 10px;
         }
         .event-countdown {
-            font-size: 14px;
-            color: red;
+            font-size: 16px;
+            color: #E44D42;
         }
         .event-category {
             font-size: 14px;
-            font-weight: bold;
-            color: #555;
-            margin-top: 10px;
+            font-weight: 500;
+            color: #777;
+            margin-top: 15px;
         }
-        .arrow-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .arrow-buttons button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .arrow-buttons button:hover {
-            background-color: #0056b3;
-        }
-        .category-summary span {
-            font-weight: bold;
+        .event-category span {
+            font-weight: 600;
         }
     </style>
 </head>
@@ -107,9 +135,12 @@
 
         <!-- Category Summary -->
         <div class="event-summary">
-            <h3>요약</h3>
-            <p><span style="color: red;">학교 행사:</span> <span id="school-events">4개</span></p>
-            <p><span style="color: blue;">수행평가:</span> <span id="assessment-events">5개</span></p>
+            <div>
+                <p><strong>학교 행사:</strong> <span id="school-events">4개</span></p>
+            </div>
+            <div>
+                <p><strong>수행평가:</strong> <span id="assessment-events">5개</span></p>
+            </div>
         </div>
 
         <!-- Event List -->
@@ -217,4 +248,5 @@
     </script>
 </body>
 </html>
+
 
