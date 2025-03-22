@@ -291,97 +291,52 @@
             }
         ];
 
-        // Track current week index
         let currentWeekIndex = 0;
 
-        // Function to update the displayed events for the current week
         function updateEvents() {
-            const currentWeek = eventsData[currentWeekIndex];
-            const weekRange = document.getElementById('week-range');
-            const eventList = document.getElementById('event-list');
-            const eventCount = document.getElementById('event-count');
-            const schoolEvents = document.getElementById('school-events');
-            const assessmentEvents = document.getElementById('assessment-events');
-            const eventDifference = document.getElementById('event-difference');
+            const weekData = eventsData[currentWeekIndex];
+            const eventListContainer = document.getElementById('event-list');
+            eventListContainer.innerHTML = ''; // Clear current events
 
-            // Update the week range
-            weekRange.innerText = currentWeek.week;
+            document.getElementById('week-range').textContent = weekData.week;
 
-            // Update the event count
-            const totalEvents = currentWeek.events.length;
-            eventCount.innerText = `${totalEvents}개`;
+            weekData.events.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-item';
 
-            // Update the event categories
-            let schoolCount = 0;
-            let assessmentCount = 0;
-            currentWeek.events.forEach(event => {
-                if (event.category === '학교 일정') schoolCount++;
-                if (event.category === '수행평가') assessmentCount++;
-            });
-            schoolEvents.innerText = `${schoolCount}개`;
-            assessmentEvents.innerText = `${assessmentCount}개`;
+                const eventDate = new Date(event.time);
+                const eventTimeFormatted = formatTime(event.time);
 
-            // Update event difference (For simplicity, we'll just show a fixed message here)
-            if (currentWeekIndex > 0) {
-                const lastWeekEvents = eventsData[currentWeekIndex - 1].events.length;
-                const difference = totalEvents - lastWeekEvents;
-                eventDifference.innerText = `지난주보다 ${difference > 0 ? difference : -difference}개 ${difference > 0 ? '더 많아요!' : '적어요!'}`;
-            } else {
-                eventDifference.innerText = "지난주보다 0개 더 많아요!";
-            }
+                const timeLeft = calculateTimeLeft(event.time);
 
-            // Clear the existing events in the list
-            eventList.innerHTML = '';
-
-            // Insert new events for the current week
-            currentWeek.events.forEach(event => {
-                const eventItem = document.createElement('div');
-                eventItem.classList.add('event-item');
-
-                eventItem.innerHTML = `
+                eventElement.innerHTML = `
                     <div class="event-title">${event.title}</div>
-                    <div class="event-category">카테고리: <span>${event.category}</span></div>
-                    <div class="event-time">${formatTime(event.time)}</div>
-                    <div class="event-countdown" id="countdown-${event.title}">남은 시간: ${calculateTimeLeft(event.time)}</div>
+                    <div class="event-category">${event.category}</div>
+                    <div class="event-time">${eventDate.toLocaleDateString()} ${eventTimeFormatted}</div>
+                    <div class="event-countdown">${timeLeft}</div>
                 `;
-                eventList.appendChild(eventItem);
 
-                // Update the countdown for this event
-                setInterval(() => {
-                    document.getElementById(`countdown-${event.title}`).innerText = `남은 시간: ${calculateTimeLeft(event.time)}`;
-                }, 1000);
+                eventListContainer.appendChild(eventElement);
             });
+
+            updateOverview(weekData.events);
         }
 
-        // Function to change the week when an arrow is clicked
-        function changeWeek(direction) {
-            currentWeekIndex += direction;
-
-            // Ensure the week index stays within bounds
-            if (currentWeekIndex < 0) {
-                currentWeekIndex = eventsData.length - 1;
-            } else if (currentWeekIndex >= eventsData.length) {
-                currentWeekIndex = 0;
-            }
-
-            updateEvents();
-        }
-
-        // Function to calculate the time left until the event
         function calculateTimeLeft(eventTime) {
-            const currentTime = new Date();
+            const now = new Date();
             const eventDate = new Date(eventTime);
-            const timeDiff = eventDate - currentTime;
+            let timeDiff = eventDate - now;
 
             if (timeDiff <= 0) {
-                return '이벤트 시작!'; // If the event has started or passed
+                return '이벤트가 시작되었습니다';
             }
 
             const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const secondsLeft = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-            return `${daysLeft}일 ${hoursLeft}시간 ${minutesLeft}분`;
+            return `${daysLeft}일 ${hoursLeft}시간 ${minutesLeft}분 ${secondsLeft}초`;
         }
 
         // Function to format event time as a readable string
@@ -390,6 +345,28 @@
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             return `${hours}:${minutes}`;
+        }
+
+        function updateOverview(events) {
+            const schoolEventsCount = events.filter(event => event.category === '학교 일정').length;
+            const assessmentEventsCount = events.filter(event => event.category === '수행평가').length;
+
+            document.getElementById('school-events').textContent = `${schoolEventsCount}개`;
+            document.getElementById('assessment-events').textContent = `${assessmentEventsCount}개`;
+            document.getElementById('event-count').textContent = `${events.length}개`;
+        }
+
+        // Week navigation
+        function changeWeek(direction) {
+            currentWeekIndex += direction;
+
+            if (currentWeekIndex < 0) {
+                currentWeekIndex = eventsData.length - 1; // Loop back to the last week
+            } else if (currentWeekIndex >= eventsData.length) {
+                currentWeekIndex = 0; // Loop back to the first week
+            }
+
+            updateEvents();
         }
 
         // Modal show and hide functions
@@ -406,5 +383,3 @@
     </script>
 </body>
 </html>
-
-
