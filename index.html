@@ -93,13 +93,14 @@
 
         /* Week Event Number and Week Change Info */
         .week-info {
-            margin-top: 20px;
+            margin-bottom: 10px;
             font-size: 1.1em;
-            color: #333;
+            color: #808080; /* Grey color */
+            font-weight: bold;
         }
 
-        .week-info p {
-            margin: 10px 0;
+        .week-info span {
+            color: #28a745; /* Green color for the numbers */
         }
 
         /* Event List Styles */
@@ -252,6 +253,13 @@
         <!-- Overview Section: Category Summary -->
         <div class="overview">
             <h2>이번 주 요약</h2>
+
+            <!-- Week Event Number and Week Change Info -->
+            <div class="week-info">
+                <p>이번 주 이벤트는 <span id="event-count">5개</span>입니다.</p>
+                <p>지난주보다 <span id="event-difference">2개 더 많아요!</span></p>
+            </div>
+
             <div class="category-summary">
                 <div>
                     <span class="category-label">학교 행사:</span>
@@ -261,11 +269,6 @@
                     <span class="category-label">수행평가:</span>
                     <span id="assessment-events" class="category-count">5개</span>
                 </div>
-            </div>
-            <!-- Week Event Number and Week Change Info -->
-            <div class="week-info">
-                <p>이번 주 이벤트는 <span id="event-count">5개</span>입니다.</p>
-                <p>지난주보다 <span id="event-difference">2개 더 많아요!</span></p>
             </div>
         </div>
 
@@ -314,7 +317,7 @@
                 eventElement.innerHTML = `
                     <div class="event-title">${event.title}</div>
                     <div class="event-category">${event.category}</div>
-                    <div class="event-time">${eventDate.toLocaleDateString()} ${eventTimeFormatted}</div>
+                    <div class="event-time">${formatDate(eventDate)} ${eventTimeFormatted}</div>
                     <div class="event-countdown">${timeLeft}</div>
                 `;
 
@@ -322,6 +325,17 @@
             });
 
             updateOverview(weekData.events);
+        }
+
+        function formatDate(date) {
+            const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const dayOfWeek = days[date.getDay()];
+            
+            return `${month} ${day}일 ${dayOfWeek}`;
         }
 
         function calculateTimeLeft(eventTime) {
