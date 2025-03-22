@@ -60,14 +60,41 @@
             font-size: 1.1em;
         }
 
-        /* Event Summary */
-        .event-summary {
+        /* Overview Section (Category Summary) */
+        .overview {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             margin-bottom: 30px;
-            font-size: 1.1em;
         }
 
-        .event-summary div {
-            margin-bottom: 10px;
+        .overview h2 {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .overview .category-summary {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .category-summary div {
+            display: flex;
+            align-items: center;
+        }
+
+        .category-summary .category-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .category-summary .category-count {
+            color: #28a745; /* Green color for the counts */
         }
 
         /* Event List Styles */
@@ -132,13 +159,18 @@
             <p>지난주보다 <span id="event-difference">2개 더 많아요!</span></p>
         </div>
 
-        <!-- Category Summary -->
-        <div class="event-summary">
-            <div>
-                <p><strong>학교 행사:</strong> <span id="school-events">4개</span></p>
-            </div>
-            <div>
-                <p><strong>수행평가:</strong> <span id="assessment-events">5개</span></p>
+        <!-- Overview Section: Category Summary -->
+        <div class="overview">
+            <h2>이번 주 요약</h2>
+            <div class="category-summary">
+                <div>
+                    <span class="category-label">학교 행사:</span>
+                    <span id="school-events" class="category-count">4개</span>
+                </div>
+                <div>
+                    <span class="category-label">수행평가:</span>
+                    <span id="assessment-events" class="category-count">5개</span>
+                </div>
             </div>
         </div>
 
@@ -274,3 +306,4 @@
     </script>
 </body>
 </html>
+
