@@ -190,6 +190,7 @@
             width: 70%;
             max-width: 500px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .modal-content h2 {
@@ -279,22 +280,16 @@
     </div>
 
     <script>
-        // Sample event data for different weeks
+        // Event data for demonstration
         const eventsData = [
             {
-                week: '3월 24일 ~ 30일',
+                week: "3월 24일 ~ 30일",
                 events: [
                     { title: '전국연합학력평가', category: '학교 일정', time: '2025-03-26T08:40:00' },
-                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-03-27T09:40:00' }
+                    { title: '실험 수행평가', category: '수행평가', time: '2025-03-27T09:40:00' }
                 ]
             },
-            {
-                week: '3월 31일 ~ 4월 6일',
-                events: [
-                    { title: '학생회 선거', category: '학교 일정', time: '2025-04-02T10:00:00' },
-                    { title: '과학실험 수행평가', category: '수행평가', time: '2025-04-05T14:00:00' }
-                ]
-            }
+            // More weeks can be added here
         ];
 
         let currentWeekIndex = 0;
@@ -403,3 +398,4 @@
     </script>
 </body>
 </html>
+
