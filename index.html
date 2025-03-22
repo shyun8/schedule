@@ -60,6 +60,12 @@
             font-size: 14px;
             color: red;
         }
+        .event-category {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+            margin-top: 10px;
+        }
         .arrow-buttons {
             display: flex;
             justify-content: space-between;
@@ -108,6 +114,7 @@
 
         <!-- Event List -->
         <div class="event-list">
+            <!-- Event 1 -->
             <div class="event-item">
                 <div class="event-title">
                     전국연합학력평가
@@ -117,6 +124,24 @@
                 </div>
                 <div class="event-countdown">
                     남은 시간: <span id="countdown">3일 14시간 50분 17초</span>
+                </div>
+                <div class="event-category">
+                    카테고리: <span style="color: red;">학교 일정</span>
+                </div>
+            </div>
+            <!-- Event 2 -->
+            <div class="event-item">
+                <div class="event-title">
+                    고전문학 재구성 수행평가 2차시
+                </div>
+                <div class="event-time">
+                    3월 27일 목요일 09:40
+                </div>
+                <div class="event-countdown">
+                    남은 시간: <span id="countdown2">3일 15시간 50분 17초</span>
+                </div>
+                <div class="event-category">
+                    카테고리: <span style="color: blue;">수행평가</span>
                 </div>
             </div>
         </div>
@@ -163,9 +188,31 @@
             }, 1000);
         }
 
+        // Countdown for second event
+        function startCountdown2() {
+            const countdownElement2 = document.getElementById("countdown2");
+            const eventTime2 = new Date("2025-03-27T09:40:00"); // Example event date
+
+            setInterval(function() {
+                const now = new Date();
+                const timeDifference = eventTime2 - now;
+
+                if (timeDifference <= 0) {
+                    countdownElement2.innerText = "이벤트가 시작되었습니다!";
+                } else {
+                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                    countdownElement2.innerText = `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+                }
+            }, 1000);
+        }
+
         // Start countdown when page loads
         window.onload = function() {
             startCountdown();
+            startCountdown2();
         };
     </script>
 </body>
