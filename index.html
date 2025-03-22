@@ -402,19 +402,15 @@
         }
 
         // Modal show and hide functions
-        document.getElementById('show-info').addEventListener('click', function () {
+        document.getElementById('show-info').addEventListener('click', () => {
             document.getElementById('info-modal').style.display = 'flex';
         });
 
-        document.getElementById('close-modal').addEventListener('click', function () {
+        document.getElementById('close-modal').addEventListener('click', () => {
             document.getElementById('info-modal').style.display = 'none';
         });
 
-        // Initialize the page with the first week's data
-        updateEvents();
+        updateEvents(); // Initial event loading
     </script>
 </body>
 </html>
-
-
-
