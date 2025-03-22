@@ -142,62 +142,97 @@
             color: #28a745; /* Green color for countdown */
         }
 
-        /* Yellow-White Banner */
+        /* Yellow-White Banner Styles */
         .info-banner {
-            background: linear-gradient(to right, #fdfb7d, #fffa87); /* Yellow to white gradient */
+            background: linear-gradient(135deg, #FFEB3B, #FFF59D); /* Yellow to White gradient */
             color: #333;
-            padding: 15px;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border-radius: 5px;
             display: flex;
             align-items: center;
-            font-size: 1.1em;
-            border-radius: 10px;
-            margin-bottom: 30px;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        .info-banner i {
+        .info-banner .info-icon {
+            font-size: 1.5em;
             margin-right: 10px;
         }
 
         .info-banner a {
             text-decoration: underline;
-            color: #007bff;
+            color: #28a745; /* Green color for the link */
         }
 
-        .info-content {
+        /* Modal Style */
+        .modal {
             display: none;
-            margin-top: 20px;
-            background-color: #f9f9f9;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
             border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 70%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .info-content ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .info-content li {
+        .modal-content h2 {
+            font-size: 1.5em;
             margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .modal-content a {
+            color: #1e90ff; /* Blue color for the link */
+            text-decoration: none;
+        }
+
+        .modal-content a:hover {
+            text-decoration: underline;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 1.5em;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Info Banner with Information Icon -->
+        <!-- Yellow-White Information Banner -->
         <div class="info-banner">
-            <i class="fas fa-info-circle"></i>
-            <span>곧 추가될 기능에 대해 알아보세요!</span>
-            <a href="javascript:void(0);" id="info-link">알아보세요</a>
+            <div class="info-icon">🛠️</div>
+            <div>곧 추가될 기능에 대해 알아보세요! <a href="#" id="show-info">알아보세요</a></div>
         </div>
 
-        <!-- Info Content (Hidden initially) -->
-        <div class="info-content" id="info-content">
-            <ul>
-                <li>UI 개선 예정: 화면 디자인이 개선될 예정입니다. (상시 프로젝트)</li>
-                <li>‘남은 준비 가능 시간’ 기능 예정: 학교에 있는 시간을 제외한 준비 가능 시간을 표시하는 기능을 곧 제공할 예정입니다. (3월 중)</li>
-                <li>새로운 기능 추가 요청은 다음 링크에서 하실 수 있습니다: <a href="http://bit.ly/4hB6twf" target="_blank" style="color: blue;">http://bit.ly/4hB6twf</a></li>
-            </ul>
+        <!-- Modal to Show Features -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="close-modal">&times;</span>
+                <h2>추가될 기능 안내</h2>
+                <p><strong>UI 개선 예정:</strong> 화면 디자인이 개선될 예정입니다. (상시 프로젝트)</p>
+                <p><strong>‘남은 준비 가능 시간’ 기능 예정:</strong> 학교에 있는 시간을 제외한 준비 가능 시간을 표시하는 기능을 곧 제공할 예정입니다. (3월 중)</p>
+                <p><strong>새로운 기능 추가 요청은 다음 링크에서 하실 수 있습니다:</strong> <a href="http://bit.ly/4hB6twf" target="_blank">http://bit.ly/4hB6twf</a></p>
+            </div>
         </div>
 
         <!-- Week Indicator and Navigation Arrows -->
@@ -339,39 +374,37 @@
             const timeDiff = eventDate - currentTime;
 
             if (timeDiff <= 0) {
-                return '이벤트 시작!'; // If the event has passed
+                return '이벤트 시작!'; // If the event has started or passed
             }
 
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 
-            return `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+            return `${daysLeft}일 ${hoursLeft}시간 ${minutesLeft}분`;
         }
 
-        // Function to format the event time (with leading zero for single digit hours)
+        // Function to format event time as a readable string
         function formatTime(eventTime) {
-            const eventDate = new Date(eventTime);
-            let hours = eventDate.getHours();
-            let minutes = eventDate.getMinutes();
-
-            // Add leading zero for single digit hours and minutes
-            hours = hours < 10 ? `0${hours}` : hours;
-            minutes = minutes < 10 ? `0${minutes}` : minutes;
-
+            const date = new Date(eventTime);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
             return `${hours}:${minutes}`;
         }
 
-        // Toggle the info content when the link is clicked
-        document.getElementById('info-link').addEventListener('click', () => {
-            const infoContent = document.getElementById('info-content');
-            infoContent.style.display = infoContent.style.display === 'none' ? 'block' : 'none';
+        // Modal show and hide functions
+        document.getElementById('show-info').addEventListener('click', function () {
+            document.getElementById('info-modal').style.display = 'flex';
         });
 
-        // Initialize the page with the first week's events
+        document.getElementById('close-modal').addEventListener('click', function () {
+            document.getElementById('info-modal').style.display = 'none';
+        });
+
+        // Initialize the page with the first week's data
         updateEvents();
     </script>
 </body>
 </html>
+
 
