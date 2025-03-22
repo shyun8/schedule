@@ -141,10 +141,65 @@
             font-size: 1em; /* Set to 1em as requested */
             color: #28a745; /* Green color for countdown */
         }
+
+        /* Yellow-White Banner */
+        .info-banner {
+            background: linear-gradient(to right, #fdfb7d, #fffa87); /* Yellow to white gradient */
+            color: #333;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .info-banner i {
+            margin-right: 10px;
+        }
+
+        .info-banner a {
+            text-decoration: underline;
+            color: #007bff;
+        }
+
+        .info-content {
+            display: none;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .info-content li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Info Banner with Information Icon -->
+        <div class="info-banner">
+            <i class="fas fa-info-circle"></i>
+            <span>곧 추가될 기능에 대해 알아보세요!</span>
+            <a href="javascript:void(0);" id="info-link">알아보세요</a>
+        </div>
+
+        <!-- Info Content (Hidden initially) -->
+        <div class="info-content" id="info-content">
+            <ul>
+                <li>UI 개선 예정: 화면 디자인이 개선될 예정입니다. (상시 프로젝트)</li>
+                <li>‘남은 준비 가능 시간’ 기능 예정: 학교에 있는 시간을 제외한 준비 가능 시간을 표시하는 기능을 곧 제공할 예정입니다. (3월 중)</li>
+                <li>새로운 기능 추가 요청은 다음 링크에서 하실 수 있습니다: <a href="http://bit.ly/4hB6twf" target="_blank" style="color: blue;">http://bit.ly/4hB6twf</a></li>
+            </ul>
+        </div>
+
         <!-- Week Indicator and Navigation Arrows -->
         <div class="week-indicator">
             <span id="week-range">3월 24일 ~ 30일</span>
@@ -295,16 +350,28 @@
             return `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
         }
 
-        // Function to format the event time
+        // Function to format the event time (with leading zero for single digit hours)
         function formatTime(eventTime) {
-            const date = new Date(eventTime);
-            return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${["일", "월", "화", "수", "목", "금", "토"][date.getDay()]}요일 ${date.getHours()}:${date.getMinutes()}`;
+            const eventDate = new Date(eventTime);
+            let hours = eventDate.getHours();
+            let minutes = eventDate.getMinutes();
+
+            // Add leading zero for single digit hours and minutes
+            hours = hours < 10 ? `0${hours}` : hours;
+            minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+            return `${hours}:${minutes}`;
         }
 
-        // Initialize the first week on page load
-        window.onload = function() {
-            updateEvents();
-        };
+        // Toggle the info content when the link is clicked
+        document.getElementById('info-link').addEventListener('click', () => {
+            const infoContent = document.getElementById('info-content');
+            infoContent.style.display = infoContent.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Initialize the page with the first week's events
+        updateEvents();
     </script>
 </body>
 </html>
+
