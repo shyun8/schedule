@@ -7,112 +7,101 @@
     <!-- Link to Pretendard font -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <style>
+        /* General Styles */
         body {
-            font-family: 'Pretendard', sans-serif;
+            font-family: "Pretendard Variable", Pretendard, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f7fb;
+            background-color: #f4f4f9;
             color: #333;
         }
+
         .container {
+            width: 90%;
             max-width: 900px;
-            margin: 40px auto;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
+
+        /* Week Indicator and Navigation Arrows */
         .week-indicator {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2a2a2a;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .arrow-buttons {
             text-align: center;
             margin-bottom: 20px;
         }
-        .arrow-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
+
         .arrow-buttons button {
-            background-color: transparent;
-            color: #007BFF;
-            border: 1px solid #007BFF;
-            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            border: none;
             padding: 10px;
-            font-size: 20px;
-            margin: 0 10px;
+            font-size: 1.2em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            margin: 0 10px;
+            border-radius: 5px;
         }
+
         .arrow-buttons button:hover {
-            background-color: #007BFF;
-            color: #fff;
-            transform: translateY(-2px);
+            background-color: #0056b3;
         }
+
+        /* Week Change Info */
         .week-change {
-            font-weight: 600;
-            color: #333;
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 18px;
+            margin-bottom: 20px;
         }
-        .week-change span {
-            font-weight: bold;
-        }
+
+        /* Event Summary */
         .event-summary {
-            display: flex;
-            justify-content: space-between;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 40px;
-            border: 1px solid #ddd;
+            margin-bottom: 20px;
         }
-        .event-summary p {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
+
+        .event-summary div {
+            margin-bottom: 10px;
         }
+
+        /* Event List Styles */
         .event-list {
             margin-top: 30px;
         }
+
         .event-item {
-            background-color: #fff;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
             padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .event-item:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transform: translateY(-3px);
-        }
+
         .event-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 1.5em;
+            font-weight: bold;
             color: #333;
             margin-bottom: 10px;
         }
+
         .event-category {
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 1.1em;
             color: #777;
             margin-bottom: 10px;
         }
+
         .event-time {
-            font-size: 14px;
-            color: #777;
+            font-size: 1.1em;
+            color: #333;
             margin-bottom: 10px;
         }
+
         .event-countdown {
-            font-size: 14px; /* Same size as the time */
-            color: #E44D42;
-            margin-top: 10px;
-        }
-        .event-category span {
-            font-weight: 600;
+            font-size: 1.1em;
+            color: #e74c3c;
         }
     </style>
 </head>
@@ -145,108 +134,112 @@
         </div>
 
         <!-- Event List -->
-        <div class="event-list">
-            <!-- Event 1 -->
-            <div class="event-item">
-                <div class="event-title">
-                    전국연합학력평가
-                </div>
-                <div class="event-category">
-                    카테고리: <span style="color: red;">학교 일정</span>
-                </div>
-                <div class="event-time">
-                    3월 26일 수요일 08:40
-                </div>
-                <div class="event-countdown">
-                    남은 시간: <span id="countdown">3일 14시간 50분 17초</span>
-                </div>
-            </div>
-            <!-- Event 2 -->
-            <div class="event-item">
-                <div class="event-title">
-                    고전문학 재구성 수행평가 2차시
-                </div>
-                <div class="event-category">
-                    카테고리: <span style="color: blue;">수행평가</span>
-                </div>
-                <div class="event-time">
-                    3월 27일 목요일 09:40
-                </div>
-                <div class="event-countdown">
-                    남은 시간: <span id="countdown2">3일 15시간 50분 17초</span>
-                </div>
-            </div>
+        <div class="event-list" id="event-list">
+            <!-- Events will be dynamically inserted here -->
         </div>
     </div>
 
     <script>
-        // Function to simulate changing weeks
+        // Sample event data for different weeks
+        const eventsData = [
+            {
+                week: '3월 24일 ~ 30일',
+                events: [
+                    { title: '전국연합학력평가', category: '학교 일정', time: '3월 26일 수요일 08:40', countdown: '3일 14시간 50분 17초' },
+                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '3월 27일 목요일 09:40', countdown: '3일 15시간 50분 17초' }
+                ]
+            },
+            {
+                week: '3월 31일 ~ 4월 6일',
+                events: [
+                    { title: '학교 행사 1', category: '학교 일정', time: '3월 31일 월요일 10:00', countdown: '7일 10시간 30분 20초' },
+                    { title: '수학 시험', category: '수행평가', time: '4월 2일 수요일 14:00', countdown: '7일 12시간 50분 30초' }
+                ]
+            },
+            {
+                week: '4월 7일 ~ 13일',
+                events: [
+                    { title: '체육대회', category: '학교 일정', time: '4월 9일 금요일 09:00', countdown: '14일 16시간 20분 10초' },
+                    { title: '화학 실험 수행평가', category: '수행평가', time: '4월 11일 일요일 13:30', countdown: '14일 17시간 40분 50초' }
+                ]
+            }
+        ];
+
+        // Track current week index
+        let currentWeekIndex = 0;
+
+        // Function to update the displayed events for the current week
+        function updateEvents() {
+            const currentWeek = eventsData[currentWeekIndex];
+            const weekRange = document.getElementById('week-range');
+            const eventList = document.getElementById('event-list');
+            const eventCount = document.getElementById('event-count');
+            const schoolEvents = document.getElementById('school-events');
+            const assessmentEvents = document.getElementById('assessment-events');
+            const eventDifference = document.getElementById('event-difference');
+
+            // Update the week range
+            weekRange.innerText = currentWeek.week;
+
+            // Update the event count
+            const totalEvents = currentWeek.events.length;
+            eventCount.innerText = `${totalEvents}개`;
+
+            // Update the event categories
+            let schoolCount = 0;
+            let assessmentCount = 0;
+            currentWeek.events.forEach(event => {
+                if (event.category === '학교 일정') schoolCount++;
+                if (event.category === '수행평가') assessmentCount++;
+            });
+            schoolEvents.innerText = `${schoolCount}개`;
+            assessmentEvents.innerText = `${assessmentCount}개`;
+
+            // Update event difference (For simplicity, we'll just show a fixed message here)
+            if (currentWeekIndex > 0) {
+                const lastWeekEvents = eventsData[currentWeekIndex - 1].events.length;
+                const difference = totalEvents - lastWeekEvents;
+                eventDifference.innerText = `지난주보다 ${difference > 0 ? difference : -difference}개 ${difference > 0 ? '더 많아요!' : '적어요!'}`;
+            } else {
+                eventDifference.innerText = "지난주보다 0개 더 많아요!";
+            }
+
+            // Clear the existing events in the list
+            eventList.innerHTML = '';
+
+            // Insert new events for the current week
+            currentWeek.events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('event-item');
+
+                eventItem.innerHTML = `
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-category">카테고리: <span style="color: ${event.category === '학교 일정' ? 'red' : 'blue'};">${event.category}</span></div>
+                    <div class="event-time">${event.time}</div>
+                    <div class="event-countdown">남은 시간: ${event.countdown}</div>
+                `;
+                eventList.appendChild(eventItem);
+            });
+        }
+
+        // Function to change the week when an arrow is clicked
         function changeWeek(direction) {
-            const currentDate = new Date();
-            currentDate.setDate(currentDate.getDate() + (7 * direction)); // Move to previous or next week
-            const newWeekStart = new Date(currentDate);
-            newWeekStart.setDate(currentDate.getDate() - currentDate.getDay()); // Set to the start of the week (Sunday)
+            currentWeekIndex += direction;
 
-            const weekStart = formatDate(newWeekStart);
-            const weekEnd = formatDate(new Date(newWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000)); // 6 days later (Saturday)
-            document.getElementById('week-range').innerText = `${weekStart} ~ ${weekEnd}`;
+            // Ensure the week index stays within bounds
+            if (currentWeekIndex < 0) {
+                currentWeekIndex = eventsData.length - 1;
+            } else if (currentWeekIndex >= eventsData.length) {
+                currentWeekIndex = 0;
+            }
+
+            updateEvents();
         }
 
-        // Helper function to format date
-        function formatDate(date) {
-            const month = date.getMonth() + 1; // Months are 0-indexed
-            const day = date.getDate();
-            return `${month}월 ${day}일`;
-        }
-
-        // Countdown Timer Function
-        function startCountdown() {
-            const countdownElement = document.getElementById("countdown");
-            const eventTime = new Date("2025-03-26T08:40:00"); // Example event date
-
-            setInterval(function() {
-                const now = new Date();
-                const timeDifference = eventTime - now;
-
-                if (timeDifference <= 0) {
-                    countdownElement.innerText = "이벤트가 시작되었습니다!";
-                } else {
-                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-                    countdownElement.innerText = `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
-                }
-            }, 1000);
-        }
-
-        // Countdown for second event
-        function startCountdown2() {
-            const countdownElement2 = document.getElementById("countdown2");
-            const eventTime2 = new Date("2025-03-27T09:40:00"); // Example event date
-
-            setInterval(function() {
-                const now = new Date();
-                const timeDifference = eventTime2 - now;
-
-                if (timeDifference <= 0) {
-                    countdownElement2.innerText = "이벤트가 시작되었습니다!";
-                } else {
-                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-                    countdownElement2.innerText = `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
-                }
-            }, 1000);
-        }
-
-        // Start countdown when page loads
+        // Initialize the first week on page load
         window.onload = function() {
-            startCountdown();
-            startCountdown2();
+            updateEvents();
         };
     </script>
 </body>
 </html>
-
