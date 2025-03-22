@@ -53,13 +53,6 @@
             background-color: #218838; /* Darker green on hover */
         }
 
-        /* Week Change Info */
-        .week-change {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-        }
-
         /* Overview Section (Category Summary) */
         .overview {
             background-color: #f9f9f9; /* Lighter color for the overview box */
@@ -96,6 +89,17 @@
 
         .category-summary .category-count {
             color: #28a745; /* Green color for the counts */
+        }
+
+        /* Week Event Number and Week Change Info */
+        .week-info {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .week-info p {
+            margin: 10px 0;
         }
 
         /* Event List Styles */
@@ -245,12 +249,6 @@
             <button id="next-week" onclick="changeWeek(1)">▶</button>
         </div>
 
-        <!-- Event Count and Change from Last Week -->
-        <div class="week-change">
-            <p>이번 주 이벤트는 <span id="event-count">5개</span>입니다.</p>
-            <p>지난주보다 <span id="event-difference">2개 더 많아요!</span></p>
-        </div>
-
         <!-- Overview Section: Category Summary -->
         <div class="overview">
             <h2>이번 주 요약</h2>
@@ -263,6 +261,11 @@
                     <span class="category-label">수행평가:</span>
                     <span id="assessment-events" class="category-count">5개</span>
                 </div>
+            </div>
+            <!-- Week Event Number and Week Change Info -->
+            <div class="week-info">
+                <p>이번 주 이벤트는 <span id="event-count">5개</span>입니다.</p>
+                <p>지난주보다 <span id="event-difference">2개 더 많아요!</span></p>
             </div>
         </div>
 
@@ -278,15 +281,15 @@
             {
                 week: '3월 24일 ~ 30일',
                 events: [
-                    { title: '전국연합학력평가', category: '학교 일정', time: '2025-03-26T08:40:00', countdown: '' },
-                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-03-27T09:40:00', countdown: '' }
+                    { title: '전국연합학력평가', category: '학교 일정', time: '2025-03-26T08:40:00' },
+                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-03-27T09:40:00' }
                 ]
             },
             {
                 week: '3월 31일 ~ 4월 6일',
                 events: [
-                    { title: '학교 행사 1', category: '학교 일정', time: '2025-03-31T10:00:00', countdown: '' },
-                    { title: '수학 시험', category: '수행평가', time: '2025-04-02T14:00:00', countdown: '' }
+                    { title: '학생회 선거', category: '학교 일정', time: '2025-04-02T10:00:00' },
+                    { title: '과학실험 수행평가', category: '수행평가', time: '2025-04-05T14:00:00' }
                 ]
             }
         ];
@@ -306,7 +309,6 @@
 
                 const eventDate = new Date(event.time);
                 const eventTimeFormatted = formatTime(event.time);
-
                 const timeLeft = calculateTimeLeft(event.time);
 
                 eventElement.innerHTML = `
@@ -354,6 +356,10 @@
             document.getElementById('school-events').textContent = `${schoolEventsCount}개`;
             document.getElementById('assessment-events').textContent = `${assessmentEventsCount}개`;
             document.getElementById('event-count').textContent = `${events.length}개`;
+
+            const prevWeekEventCount = eventsData[currentWeekIndex - 1] ? eventsData[currentWeekIndex - 1].events.length : 0;
+            const eventDifference = events.length - prevWeekEventCount;
+            document.getElementById('event-difference').textContent = `${eventDifference >= 0 ? '+' : ''}${eventDifference}개 더 많아요!`;
         }
 
         // Week navigation
