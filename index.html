@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>학교 일정</title>
-    <!-- Link to Pretendard font -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <style>
         /* General Styles */
@@ -307,19 +306,27 @@
 
                 const eventDate = new Date(event.time);
                 const eventTimeFormatted = formatTime(event.time);
-                const timeLeft = calculateTimeLeft(event.time);
 
                 eventElement.innerHTML = `
                     <div class="event-title">${event.title}</div>
                     <div class="event-category">${event.category}</div>
                     <div class="event-time">${formatDate(eventDate)} ${eventTimeFormatted}</div>
-                    <div class="event-countdown">${timeLeft}</div>
+                    <div class="event-countdown" id="countdown-${event.title}"></div>
                 `;
 
                 eventListContainer.appendChild(eventElement);
+
+                updateCountdown(event.time, event.title);
             });
 
             updateOverview(weekData.events);
+        }
+
+        function updateCountdown(eventTime, title) {
+            setInterval(() => {
+                const timeLeft = calculateTimeLeft(eventTime);
+                document.getElementById(`countdown-${title}`).textContent = timeLeft;
+            }, 1000);
         }
 
         function formatDate(date) {
@@ -398,4 +405,5 @@
     </script>
 </body>
 </html>
+
 
