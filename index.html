@@ -145,22 +145,15 @@
             {
                 week: '3월 24일 ~ 30일',
                 events: [
-                    { title: '전국연합학력평가', category: '학교 일정', time: '3월 26일 수요일 08:40', countdown: '3일 14시간 50분 17초' },
-                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '3월 27일 목요일 09:40', countdown: '3일 15시간 50분 17초' }
+                    { title: '전국연합학력평가', category: '학교 일정', time: '2025-03-26T08:40:00', countdown: '' },
+                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-03-27T09:40:00', countdown: '' }
                 ]
             },
             {
                 week: '3월 31일 ~ 4월 6일',
                 events: [
-                    { title: '학교 행사 1', category: '학교 일정', time: '3월 31일 월요일 10:00', countdown: '7일 10시간 30분 20초' },
-                    { title: '수학 시험', category: '수행평가', time: '4월 2일 수요일 14:00', countdown: '7일 12시간 50분 30초' }
-                ]
-            },
-            {
-                week: '4월 7일 ~ 13일',
-                events: [
-                    { title: '체육대회', category: '학교 일정', time: '4월 9일 금요일 09:00', countdown: '14일 16시간 20분 10초' },
-                    { title: '화학 실험 수행평가', category: '수행평가', time: '4월 11일 일요일 13:30', countdown: '14일 17시간 40분 50초' }
+                    { title: '학교 행사 1', category: '학교 일정', time: '2025-03-31T10:00:00', countdown: '' },
+                    { title: '수학 시험', category: '수행평가', time: '2025-04-02T14:00:00', countdown: '' }
                 ]
             }
         ];
@@ -215,10 +208,15 @@
                 eventItem.innerHTML = `
                     <div class="event-title">${event.title}</div>
                     <div class="event-category">카테고리: <span style="color: ${event.category === '학교 일정' ? 'red' : 'blue'};">${event.category}</span></div>
-                    <div class="event-time">${event.time}</div>
-                    <div class="event-countdown">남은 시간: ${event.countdown}</div>
+                    <div class="event-time">${formatTime(event.time)}</div>
+                    <div class="event-countdown" id="countdown-${event.title}">남은 시간: ${calculateTimeLeft(event.time)}</div>
                 `;
                 eventList.appendChild(eventItem);
+
+                // Update the countdown for this event
+                setInterval(() => {
+                    document.getElementById(`countdown-${event.title}`).innerText = `남은 시간: ${calculateTimeLeft(event.time)}`;
+                }, 1000);
             });
         }
 
@@ -234,6 +232,30 @@
             }
 
             updateEvents();
+        }
+
+        // Function to calculate the time left until the event
+        function calculateTimeLeft(eventTime) {
+            const currentTime = new Date();
+            const eventDate = new Date(eventTime);
+            const timeDiff = eventDate - currentTime;
+
+            if (timeDiff <= 0) {
+                return '이벤트 시작!'; // If the event has passed
+            }
+
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+            return `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+        }
+
+        // Function to format the event time
+        function formatTime(eventTime) {
+            const date = new Date(eventTime);
+            return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${["일", "월", "화", "수", "목", "금", "토"][date.getDay()]}요일 ${date.getHours()}:${date.getMinutes()}`;
         }
 
         // Initialize the first week on page load
