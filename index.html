@@ -278,37 +278,31 @@
     </div>
 
     <script>
-        // Event data (could be fetched dynamically or set here directly)
+        // Event data for demonstration
         const eventsData = [
             {
                 week: "3월 24일 ~ 30일",
                 events: [
-                    { title: "학교 행사가", category: "학교 행사", time: "2025-03-25T10:00:00" },
-                    { title: "수행평가", category: "수행평가", time: "2025-03-28T14:00:00" },
-                    { title: "학교 행사", category: "학교 행사", time: "2025-03-27T09:00:00" }
+                    { title: '전국연합학력평가', category: '학교 일정', time: '2025-03-26T08:40:00' },
+                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-03-27T09:40:00' }
                 ]
-            }
+            },
+            {
+                week: "3월 31일 ~ 4월 6일",
+                events: [
+                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-04-03T09:40:00' }
+                ]
+            },
+            {
+                week: "4월 7일 ~ 13일",
+                events: [
+                    { title: '고전문학 재구성 수행평가 2차시', category: '수행평가', time: '2025-04-10T09:40:00' }
+                ]
+            },
         ];
 
         let currentWeekIndex = 0;
 
-        // Function to change weeks
-        function changeWeek(direction) {
-            currentWeekIndex += direction;
-            if (currentWeekIndex < 0) currentWeekIndex = eventsData.length - 1;
-            if (currentWeekIndex >= eventsData.length) currentWeekIndex = 0;
-            updateEvents();
-        }
-
-        function formatDate(date) {
-            return date.toLocaleDateString();
-        }
-
-        function formatTime(date) {
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-
-        // Updates event data to display
         function updateEvents() {
             const weekData = eventsData[currentWeekIndex];
             const eventListContainer = document.getElementById('event-list');
@@ -327,16 +321,35 @@
                     <div class="event-title">${event.title}</div>
                     <div class="event-category">${event.category}</div>
                     <div class="event-time">${formatDate(eventDate)} ${eventTimeFormatted}</div>
-                    <div class="event-countdown">${calculateTimeLeft(event.time)}</div>
+                    <div class="event-countdown" id="countdown-${event.title}"></div>
                 `;
 
                 eventListContainer.appendChild(eventElement);
+
+                updateCountdown(event.time, event.title);
             });
 
             updateOverview(weekData.events);
         }
 
-        // Calculates the time left for an event
+        function updateCountdown(eventTime, title) {
+            setInterval(() => {
+                const timeLeft = calculateTimeLeft(eventTime);
+                document.getElementById(`countdown-${title}`).textContent = timeLeft;
+            }, 1000);
+        }
+
+        function formatDate(date) {
+            const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+            const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+            
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const dayOfWeek = days[date.getDay()];
+            
+            return `${month} ${day}일 ${dayOfWeek}`;
+        }
+
         function calculateTimeLeft(eventTime) {
             const now = new Date();
             const eventDate = new Date(eventTime);
@@ -349,16 +362,53 @@
             const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const secondsLeft = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-            return `${daysLeft}일 ${hoursLeft}시간 ${minutesLeft}분`;
+            return `${daysLeft}일 ${hoursLeft}시간 ${minutesLeft}분 ${secondsLeft}초`;
         }
 
-        // Updates the category overview with the number of events
+        // Function to format event time as a readable string
+        function formatTime(eventTime) {
+            const date = new Date(eventTime);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
         function updateOverview(events) {
-            document.getElementById('event-count').textContent = events.length + "개";
-            document.getElementById('school-events').textContent = events.filter(e => e.category === '학교 행사').length + "개";
-            document.getElementById('assessment-events').textContent = events.filter(e => e.category === '수행평가').length + "개";
+            const schoolEventsCount = events.filter(event => event.category === '학교 일정').length;
+            const assessmentEventsCount = events.filter(event => event.category === '수행평가').length;
+
+            document.getElementById('school-events').textContent = `${schoolEventsCount}개`;
+            document.getElementById('assessment-events').textContent = `${assessmentEventsCount}개`;
+            document.getElementById('event-count').textContent = `${events.length}개`;
+
+            const prevWeekEventCount = eventsData[currentWeekIndex - 1] ? eventsData[currentWeekIndex - 1].events.length : 0;
+            const eventDifference = events.length - prevWeekEventCount;
+            document.getElementById('event-difference').textContent = `${eventDifference >= 0 ? '+' : ''}${eventDifference}개`;
         }
+
+        // Week navigation
+        function changeWeek(direction) {
+            currentWeekIndex += direction;
+
+            if (currentWeekIndex < 0) {
+                currentWeekIndex = eventsData.length - 1; // Loop back to the last week
+            } else if (currentWeekIndex >= eventsData.length) {
+                currentWeekIndex = 0; // Loop back to the first week
+            }
+
+            updateEvents();
+        }
+
+        // Modal show and hide functions
+        document.getElementById('show-info').addEventListener('click', function () {
+            document.getElementById('info-modal').style.display = 'flex';
+        });
+
+        document.getElementById('close-modal').addEventListener('click', function () {
+            document.getElementById('info-modal').style.display = 'none';
+        });
 
         // Initialize the page with the first week's data
         updateEvents();
