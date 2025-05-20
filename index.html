@@ -20,21 +20,53 @@
             margin: auto;
             padding: 2rem;
         }
-        .info-banner {
-            background-color: #fff7cc; /* Soft ivory / warm light yellow */
-            color: #333;
-            padding: 15px 20px;
-            font-size: 1.1em;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .info-banner a {
-            color: #2e7d32;
-            text-decoration: underline;
-        }
+.info-banner-link {
+  text-decoration: none;
+  display: block;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+}
+
+.info-banner {
+  background-color: #e6f4ea; /* pale green background */
+  color: #256d30; /* dark green text */
+  padding: 16px 24px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.15); /* subtle green shadow */
+  transition: background-color 0.3s ease;
+}
+
+.info-banner:hover {
+  background-color: #d0e9d7; /* slightly darker on hover */
+}
+
+.info-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 18px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-title {
+  font-weight: 700;
+  font-size: 1.25em;
+  line-height: 1.3;
+}
+
+.info-subtitle {
+  font-size: 0.9em;
+  color: #4a7f52; /* medium green */
+  margin-top: 3px;
+}
         .week-indicator {
             text-align: center;
             font-size: 1.5rem;
@@ -129,9 +161,27 @@
 </head>
 <body>
     <div class="container">
+        <!-- Clickable Banner -->
+    <a href="http://bit.ly/4hB6twf" target="_blank" rel="noopener noreferrer" class="info-banner-link">
         <div class="info-banner">
-            <span>🛠️ 새로운 기능이 곧 추가됩니다! <a href="#" id="show-info">자세히 보기</a></span>
+            <div class="info-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+                <line x1="8" y1="9" x2="16" y2="9"/>
+                <line x1="8" y1="12" x2="14" y2="12"/>
+            </svg>
+            </div>
+            <div class="info-text">
+                <div style="font-weight: bold; font-size: 1.2em; line-height: 1.3;">
+                    사용하신 UI에 대해 리뷰를 남겨주세요!
+                </div>
+                <div style="font-size: 0.9em; color: #555;">
+                    클릭하면 리뷰 작성 페이지로 이동합니다.
+                </div>
+            </div>
         </div>
+    </a>
+
 
         <div class="week-indicator" id="week-range">3월 24일 ~ 30일</div>
         <div class="arrow-buttons">
