@@ -228,19 +228,227 @@
 </head>
 <body>
     <div class="container">
-        
+        <!-- Yellow-White Information Banner -->
+        <div class="info-banner">
+            <div class="info-icon">🛠️</div>
+            <div>곧 추가될 기능에 대해 알아보세요! <a href="#" id="show-info">더 알아보기</a></div>
+        </div>
+
+        <!-- Modal to Show Features -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="close-modal">&times;</span>
+                <h2>추가될 기능 안내</h2>
+                <p><strong>UI 개선 예정:</strong> 화면 디자인이 개선될 예정입니다.</p>
+                <p><strong>‘남은 준비 가능 시간’ 기능 예정:</strong> 학교에 있는 시간을 제외한 준비 가능 시간을 표시하는 기능을 곧 제공할 예정입니다.</p>
+                <p><strong>새로운 기능 추가 요청은 다음 링크에서 하실 수 있습니다:</strong> <a href="http://bit.ly/4hB6twf" target="_blank">http://bit.ly/4hB6twf</a></p>
+            </div>
+        </div>
 
         <!-- Week Indicator and Navigation Arrows -->
+        <div class="week-indicator">
+            <span id="week-range">3월 24일 ~ 30일</span>
+        </div>
+        
+        <div class="arrow-buttons">
+            <button id="prev-week" onclick="changeWeek(-1)">◀</button>
+            <button id="next-week" onclick="changeWeek(1)">▶</button>
+        </div>
 
         <!-- Overview Section: Category Summary -->
         <div class="overview">
-            <h2>점검 안내</h2>
+            <h2>이번 주 요약</h2>
 
             <!-- Week Event Number and Week Change Info -->
             <div class="week-info">
-                <p>디자인 개선을 위해 점검중입니다. 곧 만나요!</p>
+                <p>이번 주 이벤트는 <span id="event-count">5개</span>입니다.</p>
+                <p>지난 주 대비 <span id="event-difference">2개 더 많아요!</span></p>
             </div>
 
+            <div class="category-summary">
+                <div>
+                    <span class="category-label">학교 행사:</span>
+                    <span id="school-events" class="category-count">4개</span>
+                </div>
+                <div>
+                    <span class="category-label">수행평가:</span>
+                    <span id="assessment-events" class="category-count">5개</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event List -->
+        <div class="event-list" id="event-list">
+            <!-- Events will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        let eventIntervals = []; // Array to store intervals
+
+        // Event data for demonstration
+        const eventsData = [
+            {
+                week: "5월 19일 ~ 25일",
+                events: [
+                    { title: '수학 독서', category: '수행평가', time: '2025-05-21T13:40:00' },
+                    { title: '문학 작품 읽기', category: '수행평가', time: '2025-05-22T09:40:00' }
+                    { title: '수학 주제탐구', category: '수행평가', time: '2025-05-22T10:40:00' }
+                ]
+            },
+            {
+                week: "5월 26일 ~ 6월 1일",
+                events: [
+                    { title: '영어 진로탐구 계획 작성', category: '수행평가', time: '2025-04-03T09:40:00' }
+                ]
+            },
+            {
+                week: "6월 2일 ~ 8일",
+                events: [
+                    { title: '고전문학 재구성 수행평가 3차시', category: '수행평가', time: '2025-04-10T09:40:00' }
+                ]
+            },
+            {
+                week: "6월 9일 ~ 13일",
+                events: [
+                    { title: '영어 진로탐구보고서', category: '수행평가', time: '2025-06-10T11:40:00' }
+                ]
+            },
+        ];
+
+        let currentWeekIndex = 1;
+
+        function updateEvents() {
+            const weekData = eventsData[currentWeekIndex];
+            const eventListContainer = document.getElementById('event-list');
+            eventListContainer.innerHTML = ''; // Clear current events
+
+            document.getElementById('week-range').textContent = weekData.week;
+
+            // Clear any existing intervals before updating
+            clearIntervals();
+
+            weekData.events.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-item';
+
+                const eventDate = new Date(event.time);
+                const eventTimeFormatted = formatTime(event.time);
+
+                eventElement.innerHTML = `
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-category">${event.category}</div>
+                    <div class="event-time">${formatDate(eventDate)} ${eventTimeFormatted}</div>
+                    <div class="event-countdown" id="countdown-${event.title}"></div>
+                `;
+
+                eventListContainer.appendChild(eventElement);
+
+                updateCountdown(event.time, event.title);
+            });
+
+            updateOverview(weekData.events);
+        }
+
+        function clearIntervals() {
+            // Clear all intervals
+            eventIntervals.forEach(interval => clearInterval(interval));
+            eventIntervals = [];
+        }
+
+        function updateCountdown(eventTime, title) {
+            const interval = setInterval(() => {
+                const timeLeft = calculateTimeLeft(eventTime);
+                document.getElementById(`countdown-${title}`).textContent = timeLeft;
+            }, 1000);
+
+            // Store the interval to clear later
+            eventIntervals.push(interval);
+        }
+
+        function formatDate(date) {
+            const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+            const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+            
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const dayOfWeek = days[date.getDay()];
+            
+            return `${month} ${day}일 ${dayOfWeek}`;
+        }
+
+        function calculateTimeLeft(eventTime) {
+            const now = new Date();
+            const eventDate = new Date(eventTime);
+            let timeDiff = eventDate - now;
+
+            if (timeDiff <= 0) {
+                return '이벤트가 시작되었습니다';
+            }
+
+            const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const secondsLeft = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+            return `${daysLeft}일 ${hoursLeft}시간 ${minutesLeft}분 ${secondsLeft}초`;
+        }
+
+        // Function to format event time as a readable string
+        function formatTime(eventTime) {
+            const date = new Date(eventTime);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function updateOverview(events) {
+            const schoolEventsCount = events.filter(event => event.category === '학교 일정').length;
+            const assessmentEventsCount = events.filter(event => event.category === '수행평가').length;
+
+            document.getElementById('school-events').textContent = `${schoolEventsCount}개`;
+            document.getElementById('assessment-events').textContent = `${assessmentEventsCount}개`;
+            document.getElementById('event-count').textContent = `${events.length}개`;
+
+            // Handle the change in event count for the last week
+            const lastWeekIndex = currentWeekIndex === 0 ? eventsData.length - 1 : currentWeekIndex - 1;
+            const eventCountChange = events.length - eventsData[lastWeekIndex].events.length;
+            const eventDifferenceElement = document.getElementById('event-difference');
+
+            if (eventCountChange > 0) {
+                eventDifferenceElement.textContent = `${eventCountChange}개 더 많아요!`;
+            } else if (eventCountChange < 0) {
+                eventDifferenceElement.textContent = `${-eventCountChange}개 더 적어요!`;
+            } else {
+                eventDifferenceElement.textContent = '변화가 없어요!';
+            }
+        }
+
+        function changeWeek(direction) {
+            currentWeekIndex += direction;
+
+            // Loop back to the beginning or end if necessary
+            if (currentWeekIndex < 0) {
+                currentWeekIndex = eventsData.length - 1;
+            } else if (currentWeekIndex >= eventsData.length) {
+                currentWeekIndex = 0;
+            }
+
+            updateEvents();
+        }
+
+        // Initial Event Loading
+        updateEvents();
+
+        // Modal functionality
+        document.getElementById('show-info').addEventListener('click', () => {
+            document.getElementById('info-modal').style.display = 'flex';
+        });
+
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('info-modal').style.display = 'none';
+        });
+    </script>
 <footer style="text-align: center; font-size: 0.9em; color: #808080; padding: 10px 0; margin-top: 20px;">
     &copy; 2025 남상현. All rights reserved.
 </footer>
